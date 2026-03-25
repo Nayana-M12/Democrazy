@@ -103,10 +103,10 @@ const API = 'http://localhost:5000/api';
 
 // ── Users (persisted in localStorage) ─────────────────────────────────────
 const defaultUsers = [
-  { username: 'netaji123',   password: 'jai_hind',   name: 'Netaji Kumar', party: 'Janata Dal (Funny)',         constituency: 'Chaos Nagar'    },
-  { username: 'modi2024',    password: 'vikas123',   name: 'Vikas Bhai',   party: 'BJP (Bakwaas Janata Party)', constituency: 'Gujarat Central' },
-  { username: 'rahul_g',     password: 'congress1',  name: 'Rahul G',      party: 'INC (I Need Chai)',          constituency: 'Wayanad West'   },
-  { username: 'kejri_broom', password: 'aap4ever',   name: 'Arvind K',     party: 'AAP (Angry Aam Party)',      constituency: 'Delhi Darbar'   },
+  { username: 'netaji123',    password: 'jai_hind',   name: 'Netaji Kumar',  party: 'Janata Dal (Funny)',        constituency: 'Chaos Nagar'    },
+  { username: 'pappu_sharma', password: 'vikas123',   name: 'Pappu Sharma',  party: 'Bakwaas Party',             constituency: 'Ullu Nagar'     },
+  { username: 'jumla_devi',   password: 'congress1',  name: 'Jumla Devi',    party: 'Promise Party',             constituency: 'Jhooth Gaon'    },
+  { username: 'chamcha_singh',password: 'aap4ever',   name: 'Chamcha Singh', party: 'Haan Ji Dal',               constituency: 'Sycophant Pur'  },
 ];
 const users = JSON.parse(localStorage.getItem('democrazy_users') || JSON.stringify(defaultUsers));
 

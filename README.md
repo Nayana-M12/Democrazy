@@ -104,9 +104,9 @@ npm run dev
 | Username | Password |
 |----------|----------|
 | netaji123 | jai_hind |
-| modi2024 | vikas123 |
-| rahul_g | congress1 |
-| kejri_broom | aap4ever |
+| pappu_sharma | vikas123 |
+| jumla_devi | congress1 |
+| chamcha_singh | aap4ever |
 
 ---
 
