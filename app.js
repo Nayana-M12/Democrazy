@@ -352,18 +352,82 @@ function renderLeaderboard() {
 }
 
 // ── News ────────────────────────────────────────────────────────────────────
+const newsIllustrations = {
+  wifi: `<svg viewBox="0 0 120 80" class="news-svg">
+    <circle cx="60" cy="65" r="6" fill="#f97316" class="svg-pulse"/>
+    <path d="M40 50 Q60 35 80 50" fill="none" stroke="#f97316" stroke-width="3" stroke-linecap="round" class="svg-wave svg-wave1"/>
+    <path d="M25 38 Q60 18 95 38" fill="none" stroke="#f97316" stroke-width="3" stroke-linecap="round" opacity="0.6" class="svg-wave svg-wave2"/>
+    <path d="M10 26 Q60 0 110 26" fill="none" stroke="#f97316" stroke-width="3" stroke-linecap="round" opacity="0.3" class="svg-wave svg-wave3"/>
+    <circle cx="95" cy="15" r="8" fill="#1a1a2e" stroke="#f97316" stroke-width="2"/>
+    <text x="95" y="19" text-anchor="middle" font-size="9" fill="#f97316">🌙</text>
+  </svg>`,
+
+  road: `<svg viewBox="0 0 120 80" class="news-svg">
+    <rect x="0" y="50" width="120" height="30" fill="#2a2a2a"/>
+    <rect x="50" y="55" width="20" height="6" rx="2" fill="#f97316" class="svg-blink"/>
+    <rect x="0" y="45" width="120" height="8" fill="#555"/>
+    <rect x="10" y="20" width="30" height="25" rx="3" fill="#1a1a2e" stroke="#f97316" stroke-width="1.5"/>
+    <text x="25" y="36" text-anchor="middle" font-size="14">🎪</text>
+    <rect x="80" y="20" width="30" height="25" rx="3" fill="#1a1a2e" stroke="#f97316" stroke-width="1.5"/>
+    <text x="95" y="36" text-anchor="middle" font-size="14">🎪</text>
+    <path d="M40 30 L80 30" stroke="#f97316" stroke-width="2" stroke-dasharray="4 3" class="svg-dash"/>
+  </svg>`,
+
+  exam: `<svg viewBox="0 0 120 80" class="news-svg">
+    <rect x="25" y="10" width="70" height="60" rx="4" fill="#1a1a2e" stroke="#2a2a4a" stroke-width="2"/>
+    <rect x="35" y="22" width="50" height="4" rx="2" fill="#f97316" opacity="0.8"/>
+    <rect x="35" y="32" width="40" height="3" rx="2" fill="#555"/>
+    <rect x="35" y="40" width="45" height="3" rx="2" fill="#555"/>
+    <rect x="35" y="48" width="30" height="3" rx="2" fill="#555"/>
+    <circle cx="90" cy="58" r="14" fill="#ff4d4d" class="svg-stamp"/>
+    <text x="90" y="63" text-anchor="middle" font-size="13" fill="white" font-weight="bold">✗</text>
+  </svg>`,
+
+  money: `<svg viewBox="0 0 120 80" class="news-svg">
+    <rect x="15" y="25" width="90" height="40" rx="6" fill="#1a2e1a" stroke="#4ade80" stroke-width="1.5"/>
+    <circle cx="60" cy="45" r="12" fill="none" stroke="#4ade80" stroke-width="2"/>
+    <text x="60" y="50" text-anchor="middle" font-size="13" fill="#4ade80">₹</text>
+    <path d="M60 10 L60 25" stroke="#4ade80" stroke-width="2" class="svg-float"/>
+    <path d="M60 65 L60 75" stroke="#4ade80" stroke-width="2" class="svg-float"/>
+    <circle cx="30" cy="45" r="5" fill="#4ade80" opacity="0.4" class="svg-coin svg-coin1"/>
+    <circle cx="90" cy="45" r="5" fill="#4ade80" opacity="0.4" class="svg-coin svg-coin2"/>
+    <path d="M75 20 Q90 15 95 25" stroke="#f97316" stroke-width="2" fill="none" class="svg-arrow"/>
+    <text x="95" y="18" font-size="10" fill="#f97316">✈️</text>
+  </svg>`,
+
+  vote: `<svg viewBox="0 0 120 80" class="news-svg">
+    <rect x="30" y="15" width="60" height="50" rx="4" fill="#1a1a2e" stroke="#2a2a4a" stroke-width="2"/>
+    <rect x="45" y="8" width="30" height="12" rx="3" fill="#f97316"/>
+    <rect x="52" y="5" width="16" height="6" rx="2" fill="#ea6a0a"/>
+    <path d="M42 38 L52 48 L78 28" stroke="#4ade80" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" class="svg-check"/>
+    <text x="60" y="72" text-anchor="middle" font-size="9" fill="#555">VOTE</text>
+  </svg>`,
+
+  parliament: `<svg viewBox="0 0 120 80" class="news-svg">
+    <rect x="10" y="45" width="100" height="25" rx="2" fill="#1a1a2e" stroke="#2a2a4a" stroke-width="1.5"/>
+    <rect x="20" y="30" width="80" height="18" rx="2" fill="#1a1a2e" stroke="#2a2a4a" stroke-width="1.5"/>
+    <rect x="45" y="15" width="30" height="18" rx="2" fill="#1a1a2e" stroke="#f97316" stroke-width="1.5"/>
+    <rect x="57" y="5" width="6" height="12" fill="#f97316"/>
+    <circle cx="60" cy="4" r="3" fill="#f97316" class="svg-pulse"/>
+    <rect x="25" y="50" width="8" height="15" rx="1" fill="#2a2a4a" class="svg-door"/>
+    <rect x="87" y="50" width="8" height="15" rx="1" fill="#2a2a4a" class="svg-door"/>
+    <text x="60" y="42" text-anchor="middle" font-size="8" fill="#888">EMPTY</text>
+  </svg>`,
+};
+
 const newsItems = [
-  { tag: '🔴 BREAKING', title: 'Local MP Promises Free WiFi on Moon', body: 'Constituency of Chandranagar to get 5G coverage by 2025. Rocket procurement tender issued to lowest bidder.', time: '2 mins ago' },
-  { tag: '📢 POLITICS', title: 'Minister Attends 3 Inaugurations of Same Road', body: 'The road, inaugurated in 2019, 2021, and 2024, remains under construction. Fourth inauguration planned for election season.', time: '15 mins ago' },
-  { tag: '🎓 EDUCATION', title: 'Democrazy Exam Pass Rate: 0.003%', body: 'Of 10,000 aspiring politicians who took the JEE mock, only 3 passed. All 3 immediately disqualified for being "too smart".', time: '1 hour ago' },
-  { tag: '💰 ECONOMY', title: 'Govt Launches ₹1 Lakh Crore Scheme to Study Why Previous Schemes Failed', body: 'A committee has been formed to form a committee. Report expected in 2047.', time: '3 hours ago' },
-  { tag: '🗳️ ELECTIONS', title: 'Candidate Promises to Build Taj Mahal in Every Village', body: '"One Taj per village, two if you vote twice," said the candidate at a rally attended by 14 people and one confused goat.', time: '5 hours ago' },
-  { tag: '🤡 SATIRE', title: 'New Bill Proposes Politicians Must Score 50% in Democrazy Exam', body: 'Opposition walks out. Treasury benches also walk out. Bill passes with zero members present.', time: '1 day ago' },
+  { tag: '🔴 BREAKING', title: 'Local MP Promises Free WiFi on Moon', body: 'Constituency of Chandranagar to get 5G coverage by 2025. Rocket procurement tender issued to lowest bidder.', time: '2 mins ago', img: 'wifi' },
+  { tag: '📢 POLITICS', title: 'Minister Attends 3 Inaugurations of Same Road', body: 'The road, inaugurated in 2019, 2021, and 2024, remains under construction. Fourth inauguration planned for election season.', time: '15 mins ago', img: 'road' },
+  { tag: '🎓 EDUCATION', title: 'Democrazy Exam Pass Rate: 0.003%', body: 'Of 10,000 aspiring politicians who took the JEE mock, only 3 passed. All 3 immediately disqualified for being "too smart".', time: '1 hour ago', img: 'exam' },
+  { tag: '💰 ECONOMY', title: 'Govt Launches ₹1 Lakh Crore Scheme to Study Why Previous Schemes Failed', body: 'A committee has been formed to form a committee. Report expected in 2047.', time: '3 hours ago', img: 'money' },
+  { tag: '🗳️ ELECTIONS', title: 'Candidate Promises to Build Taj Mahal in Every Village', body: '"One Taj per village, two if you vote twice," said the candidate at a rally attended by 14 people and one confused goat.', time: '5 hours ago', img: 'vote' },
+  { tag: '🤡 SATIRE', title: 'New Bill Proposes Politicians Must Score 50% in Democrazy Exam', body: 'Opposition walks out. Treasury benches also walk out. Bill passes with zero members present.', time: '1 day ago', img: 'parliament' },
 ];
 
 function renderNews() {
   document.getElementById('news-grid').innerHTML = newsItems.map(n => `
     <div class="news-card">
+      <div class="news-illustration">${newsIllustrations[n.img]}</div>
       <div class="news-tag">${n.tag}</div>
       <h3 class="news-title">${n.title}</h3>
       <p class="news-body">${n.body}</p>
