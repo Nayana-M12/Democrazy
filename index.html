@@ -11,6 +11,7 @@
   <!-- LOGIN PAGE -->
   <section id="page-login" class="page">
     <div class="form-container">
+      <button class="modal-close-x" onclick="window.location.href='landing.html'">✕</button>
       <div class="logo-big">🗳️</div>
       <h2>Democrazy</h2>
       <p class="form-subtitle">Login to prove you deserve to govern. (Spoiler: you don't.)</p>
@@ -22,6 +23,10 @@
         <div class="field">
           <label>Password</label>
           <input type="password" id="login-pass" placeholder="••••••••" required />
+        </div>
+        <div class="field">
+          <label>Date of Birth</label>
+          <input type="date" id="login-dob" required />
         </div>
         <p id="login-error" class="login-error"></p>
         <button type="submit" class="btn-primary">Login 🚀</button>
@@ -58,6 +63,10 @@
           <label>Constituency</label>
           <input type="text" id="new-constituency" placeholder="e.g. Chaos Nagar" required />
         </div>
+        <div class="field">
+          <label>Date of Birth</label>
+          <input type="date" id="new-dob" required />
+        </div>
         <p id="reg-error" class="login-error"></p>
         <button type="submit" class="btn-primary">Create Account 🎉</button>
       </form>
@@ -68,16 +77,22 @@
   <section id="page-home" class="page">
     <div class="dashboard">
 
-      <!-- NAVBAR -->
-      <nav class="navbar">
-        <div class="nav-logo">🗳️ Democrazy</div>
-        <div class="nav-links">
-          <a href="#" class="nav-link active" onclick="showTab('tab-home')">🏠 Home</a>
-          <a href="#" class="nav-link" onclick="showTab('tab-exams')">📝 Mock Exams</a>
-          <a href="#" class="nav-link" onclick="showTab('tab-chatbot')">🤖 AI Chatbots</a>
-          <a href="#" class="nav-link" onclick="showTab('tab-leaderboard')">🏆 Leaderboard</a>
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <div class="sidebar-logo">🗳️ Democrazy</div>
+        <div class="lang-switcher">
+          <button class="lang-btn active" onclick="setLang('en')">🌐 EN</button>
+          <button class="lang-btn" onclick="setLang('hi')">हि</button>
+          <button class="lang-btn" onclick="setLang('kn')">ಕ</button>
         </div>
-        <div class="nav-user">
+        <nav class="sidebar-nav">
+          <a href="#" class="nav-link active" onclick="showTab('tab-home', this)">🏠 Home</a>
+          <a href="#" class="nav-link" onclick="showTab('tab-exams', this)">📝 Mock Exams</a>
+          <a href="#" class="nav-link" onclick="showTab('tab-chatbot', this)">🤖 AI Chatbots</a>
+          <a href="#" class="nav-link" onclick="showTab('tab-leaderboard', this)">🏆 Leaderboard</a>
+          <a href="#" class="nav-link" onclick="openEditProfile()">👤 Profile</a>
+        </nav>
+        <div class="sidebar-footer">
           <div class="profile-dropdown">
             <button class="profile-btn" onclick="toggleProfileMenu()">
               <span class="profile-avatar" id="profile-avatar">N</span>
@@ -98,7 +113,10 @@
             </div>
           </div>
         </div>
-      </nav>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <div class="main-content">
 
       <!-- TAB: HOME (News) -->
       <div id="tab-home" class="tab-content active">
@@ -116,14 +134,14 @@
           <p class="tab-sub">Pick your poison. Both are equally painful.</p>
           <div class="exam-cards">
             <div class="exam-card" onclick="selectExam('jee')">
-              <div class="exam-icon">⚗️</div>
-              <h3>JEE Mains</h3>
-              <p>Physics, Chemistry & Maths<br/><span class="tag">For future PMs who love calculus</span></p>
+              <div class="exam-icon">🗳️</div>
+              <h3>NET</h3>
+              <p>Neta Entrance Test<br/><span class="tag">For aspiring MLAs who know nothing</span></p>
             </div>
             <div class="exam-card" onclick="selectExam('neet')">
-              <div class="exam-icon">🧬</div>
-              <h3>NEET</h3>
-              <p>Biology, Physics & Chemistry<br/><span class="tag">For ministers who can't spell biology</span></p>
+              <div class="exam-icon">🐛</div>
+              <h3>DDT</h3>
+              <p>Democracy Debugging Test<br/><span class="tag">For MPs who can't debug democracy</span></p>
             </div>
           </div>
           <p class="disclaimer">⚠️ No actual political career will be affected. Probably.</p>
@@ -214,10 +232,9 @@
         </div>
       </div>
 
-    </div>
+    </div><!-- end main-content -->
+    </div><!-- end dashboard -->
   </section>
-
-  <!-- EXAM PAGE -->
   <section id="page-exam" class="page">
     <div class="exam-container">
       <div class="exam-header">
@@ -236,7 +253,10 @@
         <span id="q-counter"></span>
         <button class="btn-secondary" id="next-btn" onclick="nextQuestion()">Next →</button>
       </div>
-      <button class="btn-danger" onclick="submitExam()">Submit Exam 🏳️</button>
+      <div class="exam-actions">
+        <button class="btn-danger" onclick="submitExam()">Submit Exam 🏳️</button>
+        <button class="btn-cancel-exam" onclick="cancelExam()">✕ Cancel Exam</button>
+      </div>
     </div>
   </section>
 
@@ -268,8 +288,27 @@
     <p class="modal-sub">Update your candidate details. Your voters are watching.</p>
     <form onsubmit="saveProfile(event)">
       <div class="field">
+        <label>Choose Avatar</label>
+        <div class="avatar-grid" id="avatar-grid">
+          <button type="button" class="avatar-opt" onclick="selectAvatar(this, '🧑‍💼')">🧑‍💼</button>
+          <button type="button" class="avatar-opt" onclick="selectAvatar(this, '👨‍⚖️')">👨‍⚖️</button>
+          <button type="button" class="avatar-opt" onclick="selectAvatar(this, '👩‍⚖️')">👩‍⚖️</button>
+          <button type="button" class="avatar-opt" onclick="selectAvatar(this, '🧑‍🎤')">🧑‍🎤</button>
+          <button type="button" class="avatar-opt" onclick="selectAvatar(this, '🤴')">🤴</button>
+          <button type="button" class="avatar-opt" onclick="selectAvatar(this, '👸')">👸</button>
+          <button type="button" class="avatar-opt" onclick="selectAvatar(this, '🦸')">🦸</button>
+          <button type="button" class="avatar-opt" onclick="selectAvatar(this, '🧙')">🧙</button>
+          <button type="button" class="avatar-opt" onclick="selectAvatar(this, '🕵️')">🕵️</button>
+          <button type="button" class="avatar-opt" onclick="selectAvatar(this, '🤵')">🤵</button>
+        </div>
+      </div>
+      <div class="field">
         <label>Full Name</label>
         <input type="text" id="edit-name" required />
+      </div>
+      <div class="field">
+        <label>Date of Birth</label>
+        <input type="date" id="edit-dob" required />
       </div>
       <div class="field">
         <label>Party Name</label>
@@ -280,15 +319,47 @@
         <input type="text" id="edit-constituency" required />
       </div>
       <div class="field">
-        <label>New Password <span style="color:#555;font-size:0.8rem">(leave blank to keep current)</span></label>
-        <input type="password" id="edit-password" placeholder="••••••••" />
+        <label>Change Password</label>
+        <button type="button" class="btn-change-pass" id="change-pass-btn" onclick="toggleChangePassword()">🔒 Change Password</button>
+      </div>
+      <div id="change-pass-section" style="display:none">
+        <div class="field">
+          <label>Current Password</label>
+          <div class="password-wrap">
+            <input type="password" id="current-password" placeholder="Enter current password" />
+            <button type="button" class="eye-btn" onclick="togglePassword('current-password', this)">👁️</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>New Password</label>
+          <div class="password-wrap">
+            <input type="password" id="edit-password" placeholder="Enter new password" />
+            <button type="button" class="eye-btn" onclick="togglePassword('edit-password', this)">👁️</button>
+          </div>
+        </div>
       </div>
       <p id="edit-error" class="login-error"></p>
       <button type="submit" class="btn-primary">Save Changes 💾</button>
     </form>
   </div>
 
+  <!-- CANCEL EXAM MODAL -->
+  <div id="cancel-modal-overlay" class="modal-overlay" onclick="dismissCancelExam()"></div>
+  <div id="cancel-modal" class="modal">
+    <div class="modal-header">
+      <h3>✕ Cancel Exam?</h3>
+    </div>
+    <p class="modal-sub">Your progress will be lost and no score will be recorded. Are you sure you want to quit?</p>
+    <div style="display:flex; gap:12px; margin-top:8px;">
+      <button class="btn-danger" style="margin:0;flex:1" onclick="confirmCancelExam()">Yes, Cancel</button>
+      <button class="btn-secondary" style="flex:1" onclick="dismissCancelExam()">Keep Going</button>
+    </div>
+  </div>
+
   <script src="questions.js?v=3"></script>
+  <script src="questions_hi.js"></script>
+  <script src="questions_kn.js"></script>
+  <script src="translations.js"></script>
   <script src="app.js?v=3"></script>
 </body>
 </html>

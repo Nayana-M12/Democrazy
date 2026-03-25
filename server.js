@@ -17,12 +17,16 @@ app.use("/api/analytics", require("./src/routes/analytics"));
 app.use("/api/promises", require("./src/routes/promises"));
 app.use("/api/speech", require("./src/routes/speech"));
 
-// Serve frontend static files
-app.use(express.static(path.join(__dirname)));
-
 app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "landing.html"));
+});
+
+app.get("/app", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
+
+// Serve static files (css, js, etc.)
+app.use(express.static(path.join(__dirname)));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
