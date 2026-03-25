@@ -1,3 +1,6 @@
+// ── Backend API ────────────────────────────────────────────────────────────
+const API = 'http://localhost:5000/api';
+
 // ── Users (persisted in localStorage) ─────────────────────────────────────
 const defaultUsers = [
   { username: 'netaji123',   password: 'jai_hind',   name: 'Netaji Kumar', party: 'Janata Dal (Funny)',         constituency: 'Chaos Nagar'    },
@@ -54,7 +57,7 @@ function handleLogin(e) {
   loginSuccess(user);
 }
 
-function handleRegisterNew(e) {
+async function handleRegisterNew(e) {
   e.preventDefault();
   const username = document.getElementById('new-username').value.trim();
   if (users.find(u => u.username === username)) {
@@ -68,6 +71,16 @@ function handleRegisterNew(e) {
     party:         document.getElementById('new-party').value.trim(),
     constituency:  document.getElementById('new-constituency').value.trim(),
   };
+
+  // Save to backend
+  try {
+    await fetch(`${API}/users/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: user.name, email: `${username}@democrazy.com` }),
+    });
+  } catch (_) { /* backend down — still allow local login */ }
+
   users.push(user);
   localStorage.setItem('democrazy_users', JSON.stringify(users));
   loginSuccess(user);
@@ -234,7 +247,7 @@ const verdicts = [
   { max: 10, emoji: '🧠', text: "Excellent! You are dangerously overqualified. Please become a scientist instead." },
 ];
 
-function submitExam() {
+async function submitExam() {
   clearInterval(timerInterval);
   const questions = examQuestions[selectedExam];
   const score = answers.reduce((acc, ans, i) => acc + (ans === questions[i].answer ? 1 : 0), 0);
@@ -260,6 +273,15 @@ function submitExam() {
   }
   leaderboard.sort((a, b) => b.marks - a.marks);
   localStorage.setItem('democrazy_lb', JSON.stringify(leaderboard));
+
+  // Save to backend
+  try {
+    await fetch(`${API}/leaderboard`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: entry.name, score: marks }),
+    });
+  } catch (_) { /* backend down — local leaderboard still works */ }
 
   document.getElementById('result-emoji').textContent  = verdict.emoji;
   document.getElementById('result-name').textContent   = `${document.getElementById('candidate-name').value} — ${document.getElementById('party-name').value}`;
